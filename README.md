@@ -1,4 +1,4 @@
-# ACSE 4.4 - The Identification Game - Group Poisson
+# The Identification Game - Group Poisson
 
 Image classification is the process of taking an input image and predicting a class for it. A convolutional neural network (CNN) is able to classify images. CNNs have a number of early layers dedicated to extracting and learning general features, and then deeper fully connected layers dedicated to learning the specific class of an image based on detected features. CNNs are an example of deep learning and as such require very large datasets to prevent overfitting. In our case, we have used transfer learning, data augmentation and regularization to mitigate the fact that we had only 500 images available per class.
 
