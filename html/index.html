@@ -1,0 +1,171 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Group Project 4: The Identification Game (by Team Poisson) &#8212; Identification Game  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="group-project-4-the-identification-game-by-team-poisson">
+<h1><a class="toc-backref" href="#id1">Group Project 4: The Identification Game (by Team Poisson)</a><a class="headerlink" href="#group-project-4-the-identification-game-by-team-poisson" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#group-project-4-the-identification-game-by-team-poisson" id="id1">Group Project 4: The Identification Game (by Team Poisson)</a></p>
+<ul>
+<li><p><a class="reference internal" href="#synopsis" id="id2">Synopsis</a></p></li>
+<li><p><a class="reference internal" href="#our-two-submitted-classifiers" id="id3">Our two submitted classifiers</a></p>
+<ul>
+<li><p><a class="reference internal" href="#inception-v3-with-test-time-augmentation" id="id4">Inception-v3  with test time augmentation</a></p></li>
+<li><p><a class="reference internal" href="#inception-v3-resnet18" id="id5">Inception v3 + ResNet18</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#using-poissonet" id="id6">Using PoissoNet</a></p>
+<ul>
+<li><p><a class="reference internal" href="#loading-the-dataset" id="id7">Loading the dataset</a></p></li>
+<li><p><a class="reference internal" href="#choosing-the-model-and-the-hyperparameters" id="id8">Choosing the model and the hyperparameters</a></p></li>
+<li><p><a class="reference internal" href="#training-the-model" id="id9">Training the model</a></p></li>
+<li><p><a class="reference internal" href="#classifying-images" id="id10">Classifying images</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="synopsis">
+<h2><a class="toc-backref" href="#id2">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this headline">¶</a></h2>
+<p>This project is an image classification problem consisting of Natural Images. Our task is to train a classifier to take an image as an input and output a class corresponding to the image. We have focused on using transfer learning on convolutional neural networks (CNNs) to create our model, PoissoNet.
+The dataset our model is trained on consists of 100,000 images categorised into 200 categories.</p>
+</div>
+<div class="section" id="our-two-submitted-classifiers">
+<h2><a class="toc-backref" href="#id3">Our two submitted classifiers</a><a class="headerlink" href="#our-two-submitted-classifiers" title="Permalink to this headline">¶</a></h2>
+<p>Our following two submissions provided the best F1 scores on the dataset.</p>
+<div class="section" id="inception-v3-with-test-time-augmentation">
+<h3><a class="toc-backref" href="#id4">Inception-v3  with test time augmentation</a><a class="headerlink" href="#inception-v3-with-test-time-augmentation" title="Permalink to this headline">¶</a></h3>
+<p>Based on tests on a variety of networks suitable for the given dataset, we found Inception-v3 provided the highest F1 score on our validation set. Inception-v3 is based on GoogLeNet (aka Inception-v1). It is a very deep CNN with 42 layers yet fewer parameters than other popular CNNs, making a lower error rate possible. It is also trained on ImageNet, making it suitable for our natural image dataset.
+Our submitted model uses transfer learning by loading the pre-trained model, freezing parameters of the first five layers, and finetuning the rest of the layers to the dataset. We also don’t use the auxiliary output in our submitted model. Although we experimented with data augmentation using both PyTorch and Albumentations, we decided to use test-time augmentation (TTA) for our predictions.
+Test-time augmentation consists of creating augmented copies of a selection of images from the test set and having the model make predictions for these. The final prediction is then an average prediction of Inception-v3 and TTA.</p>
+</div>
+<div class="section" id="inception-v3-resnet18">
+<h3><a class="toc-backref" href="#id5">Inception v3 + ResNet18</a><a class="headerlink" href="#inception-v3-resnet18" title="Permalink to this headline">¶</a></h3>
+<p>One of the pre-trained models we had trained was ResNet18, which also provided a high F1 score. ResNet18 has 18 layers (hence the name) and also trained on ImageNet. This made it a good candidate for training on our dataset. To improve the F1 scores of both Inception-v3 and ResNet18, we decided to average out the two predictions.</p>
+</div>
+</div>
+<div class="section" id="using-poissonet">
+<h2><a class="toc-backref" href="#id6">Using PoissoNet</a><a class="headerlink" href="#using-poissonet" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="loading-the-dataset">
+<h3><a class="toc-backref" href="#id7">Loading the dataset</a><a class="headerlink" href="#loading-the-dataset" title="Permalink to this headline">¶</a></h3>
+<p>The dataset is not included in the repository as it is too large to be stored on GitHub. Instead, a user wishing to train or test our models should create a ./train/ or ./test/ directory in PoissoNet.</p>
+</div>
+<div class="section" id="choosing-the-model-and-the-hyperparameters">
+<h3><a class="toc-backref" href="#id8">Choosing the model and the hyperparameters</a><a class="headerlink" href="#choosing-the-model-and-the-hyperparameters" title="Permalink to this headline">¶</a></h3>
+<p>Our model trainer allows the user to choose between 4 pre-trained models: ResNet18, ResNet50, GoogleNet, Inception-v3. We found these models to have the highest F1 scores when training and testing on the dataset.
+The user can also choose whether they want data augmentation. There are two choices: using PyTorch transforms or Albumentations. The transforms themselves can be adjusted in the code. Note that Inception-v3 has its built-in transforms so no transforms should be done on top of that.
+Once a model has been chosen, the user can decide on the following hyperparameters:
+* lr: Learning rate. Default value 1e-2.
+* momentum: Momentum. Default value 0.4.
+* batch_size: Batch size of the training dataset. Default value 64.
+* test_batch_size: Test batch size for the validation and test datasets. Default value 100.
+* n_epochs: Number of epochs to run the model for. Default value 30.
+* weight_decay: Weight decay. Default value 1e-3.</p>
+<p>Note that the default values are the values used in our submission, except for the number of epochs. For our submitted models, we had used 3-6 epochs.</p>
+</div>
+<div class="section" id="training-the-model">
+<h3><a class="toc-backref" href="#id9">Training the model</a><a class="headerlink" href="#training-the-model" title="Permalink to this headline">¶</a></h3>
+<p>Once the model and its hyperparameters have been set, simply run the entire Trainer.ipynb notebook. Our trainer splits the training dataset to have 90% training and 10% validation. The notebook will provide a live plot of the accuracy as well as the log loss for both the training and validation to keep track of how the model is doing. Finally, it will save the model for prediction.</p>
+</div>
+<div class="section" id="classifying-images">
+<h3><a class="toc-backref" href="#id10">Classifying images</a><a class="headerlink" href="#classifying-images" title="Permalink to this headline">¶</a></h3>
+<p>Once the model has been trained and saved, we can begin classifying the images using Predictor.ipynb. The user can also use one of our trained models in the Models directory. By default the user can choose to either predict with Inception-v3 with TTA or an average prediction of Inception-v3 and Resnet18. The notebook provides the functions to do ensemble prediction of up to 3 models and perform TTA on any model.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">Identification Game</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
